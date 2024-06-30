@@ -1,4 +1,4 @@
-# MNIST Neural Network without optimization (approx. 88% precision after 500 epochs)
+# MNIST Neural Network without optimization (approx. 88% precision after 5 epochs)
 from sklearn.datasets import fetch_openml
 import numpy as np
 import matplotlib
