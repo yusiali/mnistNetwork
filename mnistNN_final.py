@@ -1,4 +1,7 @@
-#  Optimized neural network with ~98% precision after 20 epochs of training
+#  Optimized neural network with 98% precision after 20 epochs of training
+#  major changes from v1: - switched from batch gradient descent to mini-batch gradient descent
+#                         - added momentum to descent algo
+#                         - better initialization of weights
 from sklearn.datasets import fetch_openml
 import numpy as np
 import matplotlib
@@ -39,6 +42,7 @@ for n in Y_train[:, i]:
     c += 1
 
 
+#  cost function using cross-entropy to calculate loss in accuracy
 def compute_loss(Y, Y_hat):
     L_sum = np.sum(np.multiply(Y, np.log(Y_hat)))
     m = Y.shape[1]
@@ -55,6 +59,7 @@ def feed_forward(X, params):
     return cache
 
 
+#  backprop function is fed caches from feed forward function
 def back_prop(X, Y, params, cache):
     dZ2 = cache["A2"] - Y
     dW2 = (1 / m_batch) * np.matmul(dZ2, cache["A1"].T)
@@ -69,18 +74,21 @@ def back_prop(X, Y, params, cache):
     return grads
 
 
+#  function used in forward propagation
 def sigmoid(z):
     s = 1 / (1 + np.exp(-z))
     return s
 
 
+#  initialize hyperparameters
 n_x = X_train.shape[0]
-n_h = 64
+n_h = 64  # hidden layer
 learning_rate = 4
 beta = .9
 batch_size = 128
 batches = -(-m // batch_size)
 
+# initialize weights
 params = {"W1": np.random.randn(n_h, n_x) * np.sqrt(1 / n_x),
           "b1": np.zeros((n_h, 1)) * np.sqrt(1 / n_x),
           "W2": np.random.randn(digits, n_h) * np.sqrt(1 / n_h),
@@ -107,6 +115,7 @@ for i in range(20):  # runs thru 20 epochs
         cache = feed_forward(X, params)
         grads = back_prop(X, Y, params, cache)
 
+        #  calculate moving average of gradients
         V_dW1 = (beta * V_dW1 + (1 - beta) * grads["dW1"])
         V_db1 = (beta * V_db1 + (1 - beta) * grads["db1"])
         V_dW2 = (beta * V_dW2 + (1 - beta) * grads["dW2"])
@@ -127,5 +136,5 @@ cache = feed_forward(X_test, params)
 predictions = np.argmax(cache["A2"], axis=0)
 labels = np.argmax(Y_test, axis=0)
 
-print(confusion_matrix(predictions, labels)) #  grid of digit recognition precision
-print(classification_report(predictions, labels)) #  precision report after training
+print(confusion_matrix(predictions, labels))  # grid of digit recognition precision
+print(classification_report(predictions, labels))  # precision report after training
