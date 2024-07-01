@@ -1,4 +1,4 @@
-#  Optimized neural network with
+#  Optimized neural network with ~98% precision after 20 epochs of training
 from sklearn.datasets import fetch_openml
 import numpy as np
 import matplotlib
