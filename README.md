@@ -1,5 +1,5 @@
 # Neural Network for the MNIST database
-##  Model recognizes numbers from images of handwritten digits
+##  Model that recognizes numbers from images of handwritten digits
 - Built from scratch with NumPy
 - Optimized neural network with 98% precision after 20 epochs of training
 - Major changes from v1:
